@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Sales.API.Data;
 using Sales.Shared.Entities;
+using StoresG1.API.Data;
 
 namespace Sales.API.Controllers
 {

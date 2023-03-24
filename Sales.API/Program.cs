@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Sales.API.Data;
+using StoresG1.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
