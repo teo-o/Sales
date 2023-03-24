@@ -1,0 +1,49 @@
+﻿@typeparam Titem
+
+@if(MyList is null)
+{
+    @if (Loading is not null)
+    {
+        @Loading
+    }
+    else
+    {
+       <div class="align-items-center">
+            <img src="https://gifimage.net/wp-content/uploads/2017/02/Loading-GIF-Image-33.gif">
+       </div>
+    }
+}
+else if(MyList.Count == 0)
+{
+    @if(NoRecords is not null)
+    {
+        @NoRecords
+    }
+    else
+    {
+       <div class="align-items-center">
+            <p>No hay registros</p>
+       </div>
+    }
+}
+else
+{
+    @Body
+}
+
+@code {
+    [Parameter]
+    public RenderFragment? Loading { get; set; }
+
+    [Parameter]
+    public RenderFragment? NoRecords { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment Body { get; set; } = null!;
+
+    [Parameter]
+    [EditorRequired]
+    public List<Titem> MyList { get; set; } = null!;
+
+}
