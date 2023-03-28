@@ -1,64 +1,63 @@
-﻿@inject SweetAlertService sweetAlertService
+﻿@inject SweetAlertService swal
 
+<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"></NavigationLock>
 
-<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"/>
-
-<EditForm EditContext="editContext" OnValidSubmit = "OnValidSubmit">
-
-    <DataAnnotationsValidator/>
-
+<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
     <div class="mb-3">
-        <label class="form-label">País: </label>
+        <label>País:</label>
         <div>
             <InputText class="form-control" @bind-Value="@Country.Name" />
             <ValidationMessage For="@(() => Country.Name)" />
         </div>
     </div>
-    <button class="btn btn-primary" type="submit">Save</button>
-    <button class="btn btn-succes" @onclick='ReturnAction'>Regresar</button>
 
+    <button class="btn btn-primary" type="submit">Guardar Cambios</button>
+    <button class="btn btn-success" @onclick="ReturnAction">Regresar</button>
 </EditForm>
-
 
 @code {
     private EditContext editContext = null!;
-
-
-    [Parameter]
-    [EditorRequired]
-    public Country Country { get; set; } = null!;
-
-    [Parameter]
-    [EditorRequired]
-    public EventCallback OnValidSubmit { get; set; }
-
-    [Parameter]
-    [EditorRequired]
-    public EventCallback ReturnAction { get; set; }
-
-    public bool FormPostedSuccessFully { get; set; }
 
     protected override void OnInitialized()
     {
         editContext = new(Country);
     }
 
+    [EditorRequired]
+    [Parameter]
+    public Country Country { get; set; } = null!;
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback ReturnAction { get; set; }
+
+    public bool FormPostedSuccessfully { get; set; } = false;
+
     private async Task OnBeforeInternalNavigation(LocationChangingContext context)
     {
-        var formWasModified = editContext.IsModified();
-        if (!formWasModified || FormPostedSuccessFully)
+        var formWasEdited = editContext.IsModified();
+
+        if (!formWasEdited)
         {
             return;
         }
 
-        var result = await sweetAlertService.FireAsync(new SweetAlertOptions
+        if (FormPostedSuccessfully)
+        {
+            return;
+        }
+
+        var result = await swal.FireAsync(new SweetAlertOptions
             {
-                Title = "Confirmacion",
-                Text = "Perderas todos los cambios ¿Desea salir sin guardar?",
+                Title = "Confirmación",
+                Text = "¿Deseas abandonar la página y perder los cambios?",
                 Icon = SweetAlertIcon.Warning,
-                ShowCancelButton = true,
-                ConfirmButtonText = "No",
-                CancelButtonText = "Si"
+                ShowCancelButton = true
             });
 
         var confirm = !string.IsNullOrEmpty(result.Value);

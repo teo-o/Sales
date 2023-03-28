@@ -39,6 +39,8 @@ namespace Stores.API.Data
                 _context.Categories.Add(new Category { Name = "Lacteos" });
                 _context.Categories.Add(new Category { Name = "Limpieza" });
             }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

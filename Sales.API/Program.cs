@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Stores.API.Data;
 using StoresG1.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext <DataContext>(x => x.UseSqlServer("name=DefaultConnection"));
+builder.Services.AddTransient<SeedDb>();
 
 var app = builder.Build();
 
